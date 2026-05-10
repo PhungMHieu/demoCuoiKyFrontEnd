@@ -1,4 +1,4 @@
-import { Layout, Menu, Table, Button, Form, Input, Modal } from 'antd';
+import { Layout, Menu, Table, Button, Form, Input, Modal, Select } from 'antd';
 import { UserOutlined, DashboardOutlined, SettingOutlined, PlusOutlined } from '@ant-design/icons';
 import { createLaborerColumns } from '../constants/LaborerColumns.jsx';
 
@@ -58,13 +58,16 @@ export const LaborerManagementView = ({
             >
               <Form form={form} layout="vertical" onFinish={onSubmit}>
                 <Form.Item name="fullName" label="Họ và tên" rules={[{ required: true, message: 'Nhập họ và tên' }]}>
-                  <Input.Search placeholder="nhập họ và tên" enterButton={false} />
+                  <Input placeholder="nhập họ và tên" />
                 </Form.Item>
                 <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Nhập số điện thoại' }]}>
-                  <Input.Search placeholder="nhập số điện thoại" enterButton={false} />
+                  <Input placeholder="nhập số điện thoại" />
                 </Form.Item>
-                <Form.Item name="status" label="Trạng thái" rules={[{ required: true, message: 'Nhập trạng thái' }]}>
-                  <Input.Search placeholder="nhập trạng thái" enterButton={false} />
+                <Form.Item name="status" label="Trạng thái" rules={[{ required: true, message: 'Chọn trạng thái' }]}>
+                  <Select placeholder="chọn trạng thái">
+                    <Select.Option value="active">Active</Select.Option>
+                    <Select.Option value="inactive">Inactive</Select.Option>
+                  </Select>
                 </Form.Item>
               </Form>
             </Modal>
