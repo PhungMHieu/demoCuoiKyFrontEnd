@@ -5,40 +5,44 @@ import { useLaborerManagement } from '../hooks/useLaborerManagement.js';
 
 export const LaborerPage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState('add');
   const [editingLaborer, setEditingLaborer] = useState(null);
-  const [createForm] = Form.useForm();
-  const [editForm] = Form.useForm();
+  const [form] = Form.useForm();
   const { laborers, loading, submitting, createNewLaborer, updateExistingLaborer, removeLaborer } = useLaborerManagement();
 
-  const handleCreate = async (values) => {
-    await createNewLaborer(values);
-    createForm.resetFields();
+  const openAdd = () => {
+    setModalMode('add');
+    setEditingLaborer(null);
+    form.resetFields();
+    setModalOpen(true);
   };
 
   const openEdit = (laborer) => {
+    setModalMode('edit');
     setEditingLaborer(laborer);
-    editForm.setFieldsValue({
+    form.setFieldsValue({
       fullName: laborer.fullName,
       phoneNumber: laborer.phoneNumber,
       status: laborer.status,
     });
-    setEditOpen(true);
+    setModalOpen(true);
   };
 
-  const closeEdit = () => {
-    setEditOpen(false);
+  const closeModal = () => {
+    setModalOpen(false);
     setEditingLaborer(null);
-    editForm.resetFields();
+    form.resetFields();
   };
 
-  const handleEditSubmit = async (values) => {
-    if (!editingLaborer?.id) {
-      return;
+  const handleSubmit = async (values) => {
+    if (modalMode === 'add') {
+      await createNewLaborer(values);
+    } else {
+      if (!editingLaborer?.id) return;
+      await updateExistingLaborer(editingLaborer.id, values);
     }
-
-    await updateExistingLaborer(editingLaborer.id, values);
-    closeEdit();
+    closeModal();
   };
 
   return (
@@ -48,13 +52,13 @@ export const LaborerPage = () => {
       laborers={laborers}
       loading={loading}
       submitting={submitting}
-      createForm={createForm}
-      editForm={editForm}
-      editOpen={editOpen}
-      onCreate={handleCreate}
-      onEditSubmit={handleEditSubmit}
+      form={form}
+      modalOpen={modalOpen}
+      modalMode={modalMode}
+      onOpenAdd={openAdd}
       onOpenEdit={openEdit}
-      onCloseEdit={closeEdit}
+      onCloseModal={closeModal}
+      onSubmit={handleSubmit}
       onDelete={removeLaborer}
     />
   );

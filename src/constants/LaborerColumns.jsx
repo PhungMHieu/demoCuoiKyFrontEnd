@@ -1,5 +1,5 @@
 import { Button, Popconfirm } from 'antd';
-import { laborerColumns } from './laborerTableConfig.jsx';
+import { laborerColumns } from './LaborerTableConfig.jsx';
 
 const renderActionButtons = (record, onOpenEdit, onDelete) => {
   return (

@@ -1,6 +1,6 @@
 import { Layout, Menu, Table, Button, Form, Input, Modal } from 'antd';
-import { UserOutlined, DashboardOutlined, SettingOutlined } from '@ant-design/icons';
-import { createLaborerColumns } from '../constants/laborerColumns.jsx';
+import { UserOutlined, DashboardOutlined, SettingOutlined, PlusOutlined } from '@ant-design/icons';
+import { createLaborerColumns } from '../constants/LaborerColumns.jsx';
 
 const { Header, Sider, Content } = Layout;
 
@@ -10,16 +10,17 @@ export const LaborerManagementView = ({
   laborers,
   loading,
   submitting,
-  createForm,
-  editForm,
-  editOpen,
-  onCreate,
-  onEditSubmit,
+  form,
+  modalOpen,
+  modalMode,
+  onOpenAdd,
   onOpenEdit,
-  onCloseEdit,
+  onCloseModal,
+  onSubmit,
   onDelete,
 }) => {
   const columns = createLaborerColumns({ onOpenEdit, onDelete });
+  const isAdd = modalMode === 'add';
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -36,50 +37,34 @@ export const LaborerManagementView = ({
         <Header style={{ padding: 0, background: '#fff' }} />
         <Content style={{ margin: '16px' }}>
           <div style={{ padding: 24, minHeight: 360, background: '#fff', borderRadius: 8 }}>
-            <h2>Danh sách Laborer</h2>
-            <Form
-              form={createForm}
-              layout="inline"
-              onFinish={onCreate}
-              style={{ marginBottom: 16, gap: 8 }}
-            >
-              <Form.Item name="fullName" rules={[{ required: true, message: 'Nhập họ và tên' }]}>
-                <Input placeholder="Họ và tên" />
-              </Form.Item>
-              <Form.Item name="phoneNumber" rules={[{ required: true, message: 'Nhập số điện thoại' }]}>
-                <Input placeholder="Số điện thoại" />
-              </Form.Item>
-              <Form.Item name="status" rules={[{ required: true, message: 'Nhập trạng thái' }]}>
-                <Input placeholder="Trạng thái" />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" loading={submitting}>
-                  Thêm mới
-                </Button>
-              </Form.Item>
-            </Form>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <h2 style={{ margin: 0 }}>Danh sách Nhân công</h2>
+              <Button type="primary" icon={<PlusOutlined />} onClick={onOpenAdd}>
+                Thêm nhân công
+              </Button>
+            </div>
 
             <Table rowKey="id" dataSource={laborers} columns={columns} loading={loading} />
 
             <Modal
-              title="Sửa laborer"
-              open={editOpen}
-              onCancel={onCloseEdit}
-              onOk={() => editForm.submit()}
+              title={isAdd ? 'Thêm nhân công' : 'Sửa nhân công'}
+              open={modalOpen}
+              onCancel={onCloseModal}
+              onOk={() => form.submit()}
               okButtonProps={{ loading: submitting }}
               cancelText="Hủy"
-              okText="Lưu"
+              okText={isAdd ? 'Thêm' : 'Lưu'}
               destroyOnClose
             >
-              <Form form={editForm} layout="vertical" onFinish={onEditSubmit}>
+              <Form form={form} layout="vertical" onFinish={onSubmit}>
                 <Form.Item name="fullName" label="Họ và tên" rules={[{ required: true, message: 'Nhập họ và tên' }]}>
-                  <Input placeholder="Họ và tên" />
+                  <Input.Search placeholder="nhập họ và tên" enterButton={false} />
                 </Form.Item>
                 <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true, message: 'Nhập số điện thoại' }]}>
-                  <Input placeholder="Số điện thoại" />
+                  <Input.Search placeholder="nhập số điện thoại" enterButton={false} />
                 </Form.Item>
                 <Form.Item name="status" label="Trạng thái" rules={[{ required: true, message: 'Nhập trạng thái' }]}>
-                  <Input placeholder="Trạng thái" />
+                  <Input.Search placeholder="nhập trạng thái" enterButton={false} />
                 </Form.Item>
               </Form>
             </Modal>

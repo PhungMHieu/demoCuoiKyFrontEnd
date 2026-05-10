@@ -1,0 +1,86 @@
+================================================================================
+                    UML CLASS DIAGRAM - LABORER MANAGEMENT
+                              demoCuoiKyFontEnd
+================================================================================
+
+   +----------------+         +----------------+
+   |   main.jsx     |-------->|     App        |
+   +----------------+         +----------------+
+                                      |
+                                      v
+                  +---------------------------------------+
+                  |            LaborerPage                |
+                  |            <<container>>              |
+                  +---------------------------------------+
+                  | - hook : useLaborerManagement         |
+                  | - view : LaborerManagementView        |
+                  +---------------------------------------+
+                  | + handleCreate(values)      : Promise |
+                  | + openEdit(laborer : Laborer): void   |
+                  | + closeEdit()               : void    |
+                  | + handleEditSubmit(values)  : Promise |
+                  | + render()                  : JSX     |
+                  +---------------------------------------+
+                            |                  |
+                       <<uses>>                <<renders>>
+                            v                  v
+   +-----------------------------------+   +-----------------------------+
+   |       useLaborerManagement        |   |   LaborerManagementView     |
+   |             <<hook>>              |   |        <<view>>             |
+   +-----------------------------------+   +-----------------------------+
+   | - api : laborerApi                |   | - columns : Column[]        |
+   +-----------------------------------+   +-----------------------------+
+   | + loadLaborers()           : Promise  | + render()      : JSX       |
+   | + createNewLaborer(values) : Promise  +-----------------------------+
+   | + updateExistingLaborer(           |
+   |     id : number,                   |
+   |     values : object)      : Promise|
+   | + removeLaborer(id : number)       |
+   |                           : Promise|
+   +------------------------------------+
+                       |
+                  <<uses>>
+                       v
+              +-----------------------------------------+
+              |              laborerApi                 |
+              |              <<service>>                |
+              +-----------------------------------------+
+              | + getLaborers()              : Laborer[]|
+              | + createLaborer(                        |
+              |     laborer : Laborer)       : Laborer  |
+              | + updateLaborer(                        |
+              |     id : number,                        |
+              |     laborer : Laborer)       : Laborer  |
+              | + deleteLaborer(id : number) : void     |
+              +-----------------------------------------+
+                       |
+                  <<creates>>
+                       v
+              +-----------------------------------------+
+              |                Laborer                  |
+              |                <<model>>                |
+              +-----------------------------------------+
+              | + id          : number                  |
+              | + fullName    : string                  |
+              | + phoneNumber : string                  |
+              | + status      : string                  |
+              +-----------------------------------------+
+              | + fromApi(data : object) : Laborer      |
+              +-----------------------------------------+
+                       |
+                  <<HTTP>>
+                       v
+              +-----------------------------------------+
+              |          Backend REST API               |
+              |           /api/laborers                 |
+              +-----------------------------------------+
+
+================================================================================
+                              GHI CHU QUAN HE
+================================================================================
+  LaborerPage  --<<uses>>-->     useLaborerManagement
+  LaborerPage  --<<renders>>-->  LaborerManagementView
+  Hook         --<<uses>>-->     laborerApi
+  laborerApi   --<<creates>>-->  Laborer
+  laborerApi   --<<HTTP>>-->     Backend REST API
+================================================================================

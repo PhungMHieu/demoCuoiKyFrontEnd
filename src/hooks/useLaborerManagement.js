@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { message } from 'antd';
-import { createLaborer, deleteLaborer, getLaborers, updateLaborer } from '../api/laborerApi.js';
+import { createLaborer, deleteLaborer, getLaborers, updateLaborer } from '../api/LaborerApi.js';
 
 const toTableRows = (items) => {
   if (!Array.isArray(items)) {
